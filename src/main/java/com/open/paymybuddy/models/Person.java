@@ -6,9 +6,11 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -43,8 +45,7 @@ public class Person extends BaseEntity {
     private String password;
 
     @Column(name = "balance", nullable = false)
-    @NotBlank
-    @Size(min = 2, max = 25)
+    @NotNull
     private BigDecimal balance;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "person")
@@ -52,8 +53,8 @@ public class Person extends BaseEntity {
     @JsonManagedReference(value = "person")
     private List<PersonConnection> connections;
 
-    /* @OneToMany(fetch = FetchType.LAZY, mappedBy = "person")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sender")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonManagedReference(value = "person")
-    private List<MoneyTransaction> transactions; */
+    @JsonManagedReference(value = "sender")
+    private List<MoneyTransaction> transactions;
 }
