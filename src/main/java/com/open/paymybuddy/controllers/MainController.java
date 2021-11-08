@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MainController {
 
-    @GetMapping(value = "/test")
+    @GetMapping(value = "/greet")
     public String Greetings() {
         return "PayMyBuddy app is running";
     }

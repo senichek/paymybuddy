@@ -13,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.hibernate.annotations.OnDelete;
@@ -41,7 +42,8 @@ public class Person extends BaseEntity {
 
     @Column(name = "password", nullable = false)
     @NotBlank
-    @Size(min = 5, max = 50)
+    @Size(min = 5, max = 250)
+    @JsonIgnore
     private String password;
 
     @Column(name = "balance", nullable = false)

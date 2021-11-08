@@ -6,7 +6,7 @@ create table users(
 ID int PRIMARY KEY AUTO_INCREMENT,
 name varchar(25) NOT NULL,
 email varchar(25) NOT NULL,
-password varchar(50) NOT NULL,
+password varchar(250) NOT NULL,
 balance integer(25)
 );
 
@@ -29,9 +29,10 @@ FOREIGN KEY (sender_id)
 REFERENCES users(ID)
 );
 
-insert into users(name,email,password,balance) values('James', 'james@gmail.com', 'pass111', 120);
-insert into users(name,email,password,balance) values('Mike', 'mike@gmail.com', 'pass111', 80);
-insert into users(name,email,password,balance) values('Carol', 'carol@gmail.com', 'pass111', 0);
+/* The un-crypted password for all three users is pass111 */
+insert into users(name,email,password,balance) values('James', 'james@gmail.com', '$2a$04$GGTsxpDhsbZS9gDKUUpqPOxXuc/9PU1h56ueiFHk68PhY0flyJJmy', 120);
+insert into users(name,email,password,balance) values('Mike', 'mike@gmail.com', '$2a$04$TsT2QU1qEJmpawJsyExnlOspyEeR32AxmkKzDibQwodasckkPp21W', 80);
+insert into users(name,email,password,balance) values('Carol', 'carol@gmail.com', '$2a$04$TsT2QU1qEJmpawJsyExnlOspyEeR32AxmkKzDibQwodasckkPp21W', 0);
 
 insert into connections(owner_id,email) values(1, 'mike@gmail.com');
 insert into connections(owner_id,email) values(1, 'carol@gmail.com');
