@@ -35,6 +35,7 @@ REFERENCES users(ID)
 insert into users(name,email,password,balance) values('James', 'james@gmail.com', '$2a$04$GGTsxpDhsbZS9gDKUUpqPOxXuc/9PU1h56ueiFHk68PhY0flyJJmy', 120);
 insert into users(name,email,password,balance) values('Mike', 'mike@gmail.com', '$2a$04$TsT2QU1qEJmpawJsyExnlOspyEeR32AxmkKzDibQwodasckkPp21W', 80);
 insert into users(name,email,password,balance) values('Carol', 'carol@gmail.com', '$2a$04$TsT2QU1qEJmpawJsyExnlOspyEeR32AxmkKzDibQwodasckkPp21W', 0);
+insert into users(name,email,password,balance) values('Ron', 'ron@gmail.com', '$2a$04$TsT2QU1qEJmpawJsyExnlOspyEeR32AxmkKzDibQwodasckkPp21W', 40);
 
 insert into connections(owner_id,email) values(1, 'mike@gmail.com');
 insert into connections(owner_id,email) values(1, 'carol@gmail.com');

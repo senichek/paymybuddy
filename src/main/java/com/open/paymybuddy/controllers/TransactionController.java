@@ -29,8 +29,8 @@ public class TransactionController {
         return new ResponseEntity<>(moneyTransactionService.create(id, receiverEmail, amount), HttpStatus.OK);
     }
 
-    @GetMapping(value="/transaction/all")
+   /*  @GetMapping(value="/transaction/all")
     public ResponseEntity<List<MoneyTransaction>> getAll() {
         return new ResponseEntity<>(moneyTransactionService.getAll(), HttpStatus.OK);
-    }
+    } */
 }

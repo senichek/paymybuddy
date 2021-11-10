@@ -8,6 +8,6 @@ import com.open.paymybuddy.models.Person;
 
 public interface MoneyTransactionService {
     MoneyTransaction create(Integer senderID, String receiverEmail, BigDecimal amount) throws Exception;
-    List<MoneyTransaction> getAll();
+    List<MoneyTransaction> getAllForLoggedIn(String emailOfLoggedInUser);
     Boolean isFriend(Person one, Person two);
 }

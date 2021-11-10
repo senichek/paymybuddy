@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/rest/**").authenticated()
                 .and()
                 .formLogin()
-               // .loginPage("/login") //custom login page, login view must be also returned by controller
+                .loginPage("/login") //custom login page, login view must be also returned by controller
                 //.failureUrl("/error")
                 .permitAll()
                 .and()

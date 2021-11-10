@@ -1,22 +1,18 @@
 package com.open.paymybuddy.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.List;
-
-import com.open.paymybuddy.models.MoneyTransaction;
 import com.open.paymybuddy.models.Person;
 import com.open.paymybuddy.models.PersonConnection;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class PersonСonnectionsServiceImplTest {
+public class PersonConnectionsServiceImplTest {
 
     @Autowired
     PersonConnectionsService personConnectionsService;
@@ -34,4 +30,19 @@ public class PersonСonnectionsServiceImplTest {
         }
     }
 
+    @Test
+    public void createTest() throws Exception {
+        PersonConnection expected = new PersonConnection("mike@gmail.com", new Person());
+        PersonConnection fromService = personConnectionsService.create(1, "mike@gmail.com");
+        assertEquals(expected.getEmail(), fromService.getEmail());
+    }
+
+    @Test
+    public void createWithExceptionTest() {
+        Exception exception = assertThrows(Exception.class, () -> personConnectionsService.create(2, "mike@gmail.com"));
+        assertTrue(exception.getMessage().contains("Data Integrity Exception."));
+
+        exception = assertThrows(Exception.class, () -> personConnectionsService.create(1, "nonExistant@gmail.com"));
+        assertTrue(exception.getMessage().contains("Entity with email nonExistant@gmail.com does not exist."));
+    }
 }

@@ -14,6 +14,7 @@ public class PersonServiceImpl implements PersonService {
     @Autowired
     PersonRepo personRepo;
 
+    // TODO скорее всего не нужен вообще, удалить в будущем
     @Override
     public List<Person> getAll() {
         return personRepo.findAll();

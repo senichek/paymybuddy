@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -38,7 +39,7 @@ public class Person extends BaseEntity {
 
     @Column(name = "email", nullable = false)
     @NotBlank
-    @Size(min = 2, max = 25)
+    @Email
     private String email;
 
     @Column(name = "password", nullable = false)
