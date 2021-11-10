@@ -24,10 +24,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception {        
         http
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/", "/login").permitAll()
                // .antMatchers("/admin/**", "/rest/admin/**").hasRole("ADMIN")
                 .antMatchers("/rest/**").authenticated()
                 .and()
@@ -36,8 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.failureUrl("/error")
                 .permitAll()
                 .and()
-                .csrf().ignoringAntMatchers("/rest/**")
-                .and()
+                .csrf().disable()
+                //.csrf().ignoringAntMatchers("/rest/**")
                 .logout()
                 .permitAll()
                // .and()

@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PersonConnectionsRepo extends JpaRepository<PersonConnection, Integer> {
-    @Query(value = "SELECT DISTINCT p FROM PersonConnection p WHERE p.person.id=:id")
+    @Query(value = "SELECT DISTINCT p FROM PersonConnection p WHERE p.owner.id=:id")
     List<PersonConnection> findAllByOwnerID(Integer id);
 }

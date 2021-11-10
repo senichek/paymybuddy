@@ -1,6 +1,7 @@
 package com.open.paymybuddy.models;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,4 +52,12 @@ public class MoneyTransaction extends BaseEntity {
     @Column(name = "receiver_email", nullable = false)
     @NotBlank
     private String receiverEmail;
+
+    @Column(name = "tax", nullable = false)
+    @NotNull
+    private BigDecimal tax;
+
+    @Column(name = "date_time", nullable = false)
+    @NotNull
+    private LocalDateTime dateTime;
 }

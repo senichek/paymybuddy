@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -19,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -26,6 +26,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class Person extends BaseEntity {
@@ -47,12 +48,11 @@ public class Person extends BaseEntity {
     private String password;
 
     @Column(name = "balance", nullable = false)
-    @NotNull
     private BigDecimal balance;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "person")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonManagedReference(value = "person")
+    @JsonManagedReference(value = "owner")
     private List<PersonConnection> connections;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sender")

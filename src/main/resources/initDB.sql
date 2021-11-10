@@ -5,9 +5,9 @@ DROP TABLE IF EXISTS users cascade;
 create table users(
 ID int PRIMARY KEY AUTO_INCREMENT,
 name varchar(25) NOT NULL,
-email varchar(25) NOT NULL,
+email varchar(25) NOT NULL UNIQUE,
 password varchar(250) NOT NULL,
-balance integer(25)
+balance double
 );
 
 create table connections(
@@ -24,7 +24,9 @@ sender_id integer(10) NOT NULL,
 sender_email varchar(25) NOT NULL,
 receiver_email varchar(25) NOT NULL,
 description varchar(150) NOT NULL,
-amount integer(25),
+amount double,
+tax double,
+date_time DATETIME NOT NULL,
 FOREIGN KEY (sender_id)
 REFERENCES users(ID)
 );
@@ -38,4 +40,4 @@ insert into connections(owner_id,email) values(1, 'mike@gmail.com');
 insert into connections(owner_id,email) values(1, 'carol@gmail.com');
 insert into connections(owner_id,email) values(3, 'james@gmail.com');
 
-insert into transactions(sender_id, sender_email,receiver_email,description,amount) VALUES(2, 'mike@gmail.com', 'james@gmail.com', 'Dinner', 20);
+insert into transactions(sender_id, sender_email,receiver_email,description,amount,tax,date_time) VALUES(2, 'mike@gmail.com', 'james@gmail.com', 'Dinner', 20.0, 1.0, '2021-11-07 16:00:00');

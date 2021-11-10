@@ -6,4 +6,5 @@ import com.open.paymybuddy.models.Person;
 
 public interface PersonService {
     List<Person> getAll();
+    Person create(Person person);
 }
