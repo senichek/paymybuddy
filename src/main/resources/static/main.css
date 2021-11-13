@@ -1,3 +1,110 @@
-p {
-    background-color: brown;
+.img-logo {
+    height: 60px;
+    width: auto;
+    margin-top: 20px;
+    margin-bottom: 35px;
 }
+
+.img-logo-transfers {
+    height: 50px;
+    width: auto;
+    margin-left: 1px;
+}
+
+.login-div {
+    border: solid rgb(155, 153, 153) 1px;
+    border-radius: 25px;
+    margin: 37%;
+    margin-top: 150px;
+    padding: 15px;
+    padding-bottom: 50px;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.input-fields-container {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 40px;
+}
+
+.send-money {
+  margin-top: 60px;
+  margin-right: auto;
+  margin-left: 26%;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.connections {
+  margin-top: 60px;
+  margin-right: 25%;
+}
+
+.my-transactions {
+  margin-top: 50px;
+  margin-right: auto;
+  margin-left: 26%;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.table-container {
+  border: solid rgb(212, 212, 212) 2px;
+  margin: auto;
+  margin-top: 20px;
+  width: 50%;
+  text-align: center;
+}
+
+.paging-div {
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  min-width: 220px;
+}
+
+table {
+  table-layout: auto;
+  width: 100%;  
+}
+
+thead {
+  background-color: #61b95a;
+  color: rgb(255, 255, 255);
+}
+
+tr {
+  height: 100px;
+}
+
+/* Navigation bar */
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: rgb(255, 255, 255);
+  }
+  
+  li {
+    float: left;
+  }
+  
+  li a {
+    display: block;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  li a:hover {
+    background-color:#61b95a;
+  }

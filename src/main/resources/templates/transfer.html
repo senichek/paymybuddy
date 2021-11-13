@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Pay My Buddy</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
+
+   <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css"
+    />
+    <link th:href="@{main.css}" rel="stylesheet" />
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    </head>
+  <body>
+
+<div class="screen-container">
+    <ul>
+      <li><img class="img-logo-transfers" th:src="@{logo.png}"/></li>
+      <li style="float: right"><a href="#logoff">Log off</a></li>
+      <li style="float: right"><a href="#contact">Contact</a></li>
+      <li style="float: right"><a href="#profile">Profile</a></li>
+      <li style="float: right"><a href="#transfer">Transfer</a></li>
+      <li style="float: right"><a href="#home">Home</a></li>
+    </ul>
+</div>
+
+<div class="flex-container">
+  <div class="send-money">Send Money</div>
+  <div class="connections" style="float: right">
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Add Connection</button>
+  <!-- Modal -->
+  <form th:action="@{/connection}" th:object="${pConnection}" method="post">
+  <div class="modal" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Connection</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="email" name="email" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" placeholder="Enter e-mail" required>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+  </div>
+</div>
+
+<div class="input-fields-container">
+  <form class="form-inline" th:action="@{/transfer}" th:object="${mTransaction}" method="post">
+    <select name="receiverEmail" class="form-control mb-2 mr-sm-2" required>
+      <option value="">SELECT CONNECTION</option>
+      <tr th:each="conns: ${connections}">
+        <option><td th:text="${conns.email}" ></td></option>
+    </select>
+  <input type="text" name="description" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" placeholder="Description" required>
+  <input type="number" name="amount" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" placeholder="Amount" required>
+  <button type="submit" class="btn btn-success mb-2" style="font-weight: bold" >Pay</button>
+</form>
+</div>
+
+<div class="my-transactions">
+My Transactions
+</div>
+<div class="table-container">
+ <table>
+  <thead>
+      <tr>
+          <th th:text="Connection" >
+          <th th:text="Description" >
+          <th th:text="Amount" >
+      </tr>
+  </thead>
+  <tbody>
+    <tr th:each="trans: ${transactionPage.content}">
+      <td th:text="${trans.receiverEmail}" >
+      <td th:text="${trans.description}" >
+      <td th:text="${trans.amount}" >
+  </tr>
+  </tbody>
+</table>
+<div class="paging-div">
+  <div th:if="${transactionPage.totalPages > 0}" class="pagination"
+    th:each="pageNumber : ${pageNumbers}">
+    <a th:href="@{/transfer(size=${transactionPage.size}, page=${pageNumber})}"
+        th:text=${pageNumber}
+        th:class="${pageNumber==transactionPage.number + 1} ? active"></a>
+  </div>
+</div>
+</div>
+  </body>
+</html>

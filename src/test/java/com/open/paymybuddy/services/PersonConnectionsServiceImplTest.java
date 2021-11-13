@@ -7,9 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import com.open.paymybuddy.models.Person;
 import com.open.paymybuddy.models.PersonConnection;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithUserDetails;
 
 @SpringBootTest
 public class PersonConnectionsServiceImplTest {
@@ -31,6 +33,7 @@ public class PersonConnectionsServiceImplTest {
     }
 
     @Test
+    @WithUserDetails("james@gmail.com") // see https://docs.spring.io/spring-security/site/docs/4.2.x/reference/html/test-method.html#test-method-withuserdetails
     public void createTest() throws Exception {
         PersonConnection expected = new PersonConnection("mike@gmail.com", new Person());
         PersonConnection fromService = personConnectionsService.create(1, "mike@gmail.com");
@@ -38,6 +41,7 @@ public class PersonConnectionsServiceImplTest {
     }
 
     @Test
+    @WithUserDetails("james@gmail.com")
     public void createWithExceptionTest() {
         Exception exception = assertThrows(Exception.class, () -> personConnectionsService.create(2, "mike@gmail.com"));
         assertTrue(exception.getMessage().contains("Data Integrity Exception."));

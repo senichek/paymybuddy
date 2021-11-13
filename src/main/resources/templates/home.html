@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Pay My Buddy</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    Home Page
+
+    <tr th:each="trans: ${transactions}">
+      <td th:text="${trans.senderEmail}" >
+      <td th:text="${trans.receiverEmail}" >
+  </tr>
+  </body>
+</html>

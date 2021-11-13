@@ -6,8 +6,12 @@ import java.util.List;
 import com.open.paymybuddy.models.MoneyTransaction;
 import com.open.paymybuddy.models.Person;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 public interface MoneyTransactionService {
-    MoneyTransaction create(Integer senderID, String receiverEmail, BigDecimal amount) throws Exception;
+    MoneyTransaction create(Integer senderID, String receiverEmail, BigDecimal amount, String description) throws Exception;
     List<MoneyTransaction> getAllForLoggedIn(String emailOfLoggedInUser);
     Boolean isFriend(Person one, Person two);
+    Page<MoneyTransaction> findPaginated(Pageable pageable, List<MoneyTransaction> transactions);
 }

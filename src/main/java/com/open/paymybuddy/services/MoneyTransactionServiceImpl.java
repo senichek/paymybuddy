@@ -2,6 +2,8 @@ package com.open.paymybuddy.services;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -16,6 +18,10 @@ import com.open.paymybuddy.utils.NotFoundException;
 import com.open.paymybuddy.utils.SecurityUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 // TODO добавить transactional
 // TODO потестировать сценарий провала создания транзакции, выбросить экспешн перед сохранением транзакции в бд
@@ -32,9 +38,9 @@ public class MoneyTransactionServiceImpl implements MoneyTransactionService {
 
     @Override
     @Transactional
-    public MoneyTransaction create(Integer senderID, String receiverEmail, BigDecimal amount) throws Exception {
-        if (SecurityUtil.LOGGED_IN_USER != senderID) {
-            throw new Exception("Data Integrity Exception."); //TODO вставить сюда реального залогиненного пользователя
+    public MoneyTransaction create(Integer senderID, String receiverEmail, BigDecimal amount, String description) throws Exception {
+        if (SecurityUtil.getLoggedInUser().getId() != senderID) {
+            throw new Exception("Data Integrity Exception.");
         }
         Person sender = personRepo.findByid(senderID);
         Person receiver = personRepo.findByEmail(receiverEmail);
@@ -57,7 +63,7 @@ public class MoneyTransactionServiceImpl implements MoneyTransactionService {
             receiver.setBalance(receiver.getBalance().add(amount));
             // Substracting tax of 5%
             sender.setBalance(sender.getBalance().subtract(amount.multiply(tax)));
-            MoneyTransaction mtrans = new MoneyTransaction("Placeholder", amount, sender, sender.getEmail(),
+            MoneyTransaction mtrans = new MoneyTransaction(description, amount, sender, sender.getEmail(),
                     receiverEmail, amount.multiply(tax), LocalDateTime.now());
             return moneyTransactionRepo.save(mtrans);
         }
@@ -76,9 +82,33 @@ public class MoneyTransactionServiceImpl implements MoneyTransactionService {
 
     @Override
     public List<MoneyTransaction> getAllForLoggedIn(String emailOfLoggedInUser) {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO переделать чтобы получать список залогинненого пользователя
+        List<MoneyTransaction> result = moneyTransactionRepo.findAll();
+        Collections.sort(result, new Comparator<MoneyTransaction>() {
+            public int compare(MoneyTransaction o1, MoneyTransaction o2) {
+                return o2.getDateTime().compareTo(o1.getDateTime());
+            }
+          });
+          return result;
     }
 
-    
+    @Override
+    public Page<MoneyTransaction> findPaginated(Pageable pageable, List<MoneyTransaction> transactions) {
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<MoneyTransaction> list;
+
+        if (transactions.size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, transactions.size());
+            list = transactions.subList(startItem, toIndex);
+        }
+
+        Page<MoneyTransaction> transactionPage
+          = new PageImpl<MoneyTransaction>(list, PageRequest.of(currentPage, pageSize), transactions.size());
+
+        return transactionPage;
+    }
 }

@@ -2,12 +2,6 @@ package com.open.paymybuddy.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.List;
-
-import com.open.paymybuddy.models.MoneyTransaction;
 import com.open.paymybuddy.models.Person;
 
 import org.junit.jupiter.api.Test;

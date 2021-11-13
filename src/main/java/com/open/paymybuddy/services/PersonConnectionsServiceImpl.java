@@ -29,9 +29,11 @@ public class PersonConnectionsServiceImpl implements PersonConnectionsService {
 	@Override
 	public PersonConnection create(Integer ownerID, String friendsEmail) throws Exception {
 		// TODO переделать на реального залог. пользователя
-		if (SecurityUtil.LOGGED_IN_USER != ownerID) {
+		// TODO добавить проверку на то есть ли друг уже в списке друзей, если есть,
+		// то ничего не делать или добавить снова, но чтобы в списке не было дубликатов.
+		if (SecurityUtil.getLoggedInUser().getId() != ownerID) {
 			throw new Exception("Data Integrity Exception.");
-			// You can to connections (to firends) only users that exist in DB, i.e. the
+			// You can add to connections (to firends) only users that exist in DB, i.e. the
 			// registered ones.
 		} else if (personRepo.findByEmail(friendsEmail) == null) {
 			throw new NotFoundException(String.format("Entity with email %s does not exist.", friendsEmail));

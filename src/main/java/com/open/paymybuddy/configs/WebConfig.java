@@ -14,6 +14,7 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 @Configuration
 public class WebConfig {
+    // TODO move credentials to a file.
     @Bean
     public DataSource dataSource() {
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
