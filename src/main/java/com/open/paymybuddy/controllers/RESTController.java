@@ -18,8 +18,8 @@ public class RESTController {
     @Autowired
     MoneyTransactionService moneyTransactionService;
 
-    @GetMapping(value="/rst/transfer")
-    public ResponseEntity<List<MoneyTransaction>> getTransactions() {
+    @GetMapping(value="/rest/transfer")
+    public ResponseEntity<List<MoneyTransaction>> getTransactions() throws Exception {
         List<MoneyTransaction> transactions = moneyTransactionService.getAllForLoggedIn("james@gmail.com");
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }

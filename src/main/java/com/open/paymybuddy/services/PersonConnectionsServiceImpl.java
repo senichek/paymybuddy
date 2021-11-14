@@ -28,7 +28,6 @@ public class PersonConnectionsServiceImpl implements PersonConnectionsService {
 
 	@Override
 	public PersonConnection create(Integer ownerID, String friendsEmail) throws Exception {
-		// TODO переделать на реального залог. пользователя
 		// TODO добавить проверку на то есть ли друг уже в списке друзей, если есть,
 		// то ничего не делать или добавить снова, но чтобы в списке не было дубликатов.
 		if (SecurityUtil.getLoggedInUser().getId() != ownerID) {

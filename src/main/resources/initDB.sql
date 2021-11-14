@@ -41,7 +41,7 @@ insert into connections(owner_id,email) values(1, 'mike@gmail.com');
 insert into connections(owner_id,email) values(1, 'carol@gmail.com');
 insert into connections(owner_id,email) values(3, 'james@gmail.com');
 
-insert into transactions(sender_id, sender_email,receiver_email,description,amount,tax,date_time) VALUES(2, 'mike@gmail.com', 'james@gmail.com', 'Dinner', 20.0, 1.0, '2021-11-07 15:00:00');
+insert into transactions(sender_id, sender_email,receiver_email,description,amount,tax,date_time) VALUES(3, 'carol@gmail.com', 'james@gmail.com', 'Dinner', 20.0, 1.0, '2021-11-07 15:00:00');
 insert into transactions(sender_id, sender_email,receiver_email,description,amount,tax,date_time) VALUES(1, 'james@gmail.com', 'carol@gmail.com', 'Dinner', 20.0, 1.0, '2021-11-07 12:00:00');
 insert into transactions(sender_id, sender_email,receiver_email,description,amount,tax,date_time) VALUES(1, 'james@gmail.com', 'carol@gmail.com', 'Lunch', 20.0, 1.0, '2021-11-07 16:00:00');
 insert into transactions(sender_id, sender_email,receiver_email,description,amount,tax,date_time) VALUES(1, 'james@gmail.com', 'carol@gmail.com', 'Supper', 20.0, 1.0, '2021-11-07 20:00:00');

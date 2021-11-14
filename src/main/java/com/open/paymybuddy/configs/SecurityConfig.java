@@ -27,14 +27,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {        
         http
                 .authorizeRequests()
-                .antMatchers("/", "/login", "/transfer").permitAll()
+                .antMatchers("/login").permitAll()
                // .antMatchers("/admin/**", "/rest/admin/**").hasRole("ADMIN")
-                .antMatchers("/rest/**").authenticated()
+                .antMatchers("/", "/home", "/transfer" ,"/rest/**").authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login") //custom login page, login view must be also returned by controller
                 .successForwardUrl("/home") //there should be postMapping on the redirect page
-                //.failureUrl("/error")
+                .failureUrl("/error")
                 .permitAll()
                 .and()
                 .csrf().disable()

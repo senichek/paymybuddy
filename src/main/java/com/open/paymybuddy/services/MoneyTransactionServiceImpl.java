@@ -81,9 +81,11 @@ public class MoneyTransactionServiceImpl implements MoneyTransactionService {
     }
 
     @Override
-    public List<MoneyTransaction> getAllForLoggedIn(String emailOfLoggedInUser) {
-        // TODO переделать чтобы получать список залогинненого пользователя
-        List<MoneyTransaction> result = moneyTransactionRepo.findAll();
+    public List<MoneyTransaction> getAllForLoggedIn(String emailOfLoggedInUser) throws Exception {
+        if (SecurityUtil.getLoggedInUser().getEmail() != emailOfLoggedInUser) {
+            throw new Exception("Data Integrity Exception.");
+        }
+        List<MoneyTransaction> result = moneyTransactionRepo.getAllForLoggedIn(SecurityUtil.getLoggedInUser().getId());
         Collections.sort(result, new Comparator<MoneyTransaction>() {
             public int compare(MoneyTransaction o1, MoneyTransaction o2) {
                 return o2.getDateTime().compareTo(o1.getDateTime());

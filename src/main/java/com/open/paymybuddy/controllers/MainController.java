@@ -37,16 +37,27 @@ public class MainController {
 
     @PostMapping(value = "/home")
     public String homePage() {
+        // return "home";
+        return "redirect:/transfer";
+    }
+
+    @GetMapping(value = "/error")
+    public String showError() {
+        return "error";
+    }
+
+    @GetMapping(value = "/home")
+    public String showHome() {
         return "home";
     }
 
     @GetMapping(value = "/transfer")
     public String listTransactionsAndConnections(Model model, @RequestParam("page") Optional<Integer> page,
-            @RequestParam("size") Optional<Integer> size) {
+            @RequestParam("size") Optional<Integer> size) throws Exception {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(3);
 
-        List<MoneyTransaction> transactions = moneyTransactionService.getAllForLoggedIn("james@gmail.com");
+        List<MoneyTransaction> transactions = moneyTransactionService.getAllForLoggedIn(SecurityUtil.getLoggedInUser().getEmail());
 
         Page<MoneyTransaction> transactionPage = moneyTransactionService
                 .findPaginated(PageRequest.of(currentPage - 1, pageSize), transactions);

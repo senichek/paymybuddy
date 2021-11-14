@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface MoneyTransactionService {
     MoneyTransaction create(Integer senderID, String receiverEmail, BigDecimal amount, String description) throws Exception;
-    List<MoneyTransaction> getAllForLoggedIn(String emailOfLoggedInUser);
+    List<MoneyTransaction> getAllForLoggedIn(String emailOfLoggedInUser) throws Exception;
     Boolean isFriend(Person one, Person two);
     Page<MoneyTransaction> findPaginated(Pageable pageable, List<MoneyTransaction> transactions);
 }
