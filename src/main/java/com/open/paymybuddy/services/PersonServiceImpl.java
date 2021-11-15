@@ -6,6 +6,7 @@ import com.open.paymybuddy.models.Person;
 import com.open.paymybuddy.repos.PersonRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,6 +14,9 @@ public class PersonServiceImpl implements PersonService {
 
     @Autowired
     PersonRepo personRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // TODO скорее всего не нужен вообще, удалить в будущем
     @Override
@@ -22,7 +26,12 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person create(Person person) {
-        return personRepo.save(person);
+        Person exists = personRepo.findByEmail(person.getEmail());
+        if (exists != null) {
+            return null;
+        } else {
+            person.setPassword(passwordEncoder.encode(person.getPassword()));
+            return personRepo.save(person);
+        }
     }
-    
 }

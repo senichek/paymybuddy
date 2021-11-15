@@ -1,6 +1,8 @@
 package com.open.paymybuddy.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.open.paymybuddy.models.Person;
@@ -20,13 +22,16 @@ public class PersonServiceImplTest {
     public void createTest() {
         Person expected = new Person("John", "j@gmail.com", "11111", null, null, null);
         Person fromService = personService.create(new Person("John", "j@gmail.com", "11111", null, null, null));
-        assertEquals(expected, fromService);
+        assertEquals(expected.getName(), fromService.getName());
+        assertEquals(expected.getName(), fromService.getName());
+        assertNotNull(fromService.getId());
+        assertNotNull(fromService.getPassword());
+        // password is encypted, so we do not compare it to the Expected.
     }
 
     @Test
-    public void createWithExceptionTest() {
-        //Email must be unique, Database constraint.
-        personService.create(new Person("John", "j@gmail.com", "11111", null, null, null));
-        assertThrows(DataIntegrityViolationException.class, () -> personService.create(new Person("John", "j@gmail.com", "11111", null, null, null)));
+    public void createExistsTest() {
+        // if User already exists in db we return null.
+        assertNull(personService.create(new Person("james", "james@gmail.com", "11111", null, null, null)));
     }
 }

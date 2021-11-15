@@ -6,9 +6,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.open.paymybuddy.models.MoneyTransaction;
+import com.open.paymybuddy.models.Person;
 import com.open.paymybuddy.models.PersonConnection;
 import com.open.paymybuddy.services.MoneyTransactionService;
 import com.open.paymybuddy.services.PersonConnectionsService;
+import com.open.paymybuddy.services.PersonService;
 import com.open.paymybuddy.utils.SecurityUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class MainController {
     @Autowired
     PersonConnectionsService personConnectionsService;
 
+    @Autowired
+    PersonService personService;
+
     @GetMapping(value = "/login")
     public String login() {
         return "login";
@@ -49,6 +54,17 @@ public class MainController {
     @GetMapping(value = "/home")
     public String showHome() {
         return "home";
+    }
+
+    @GetMapping(value = "/registration")
+    public String showRegistration() {
+        return "registration";
+    }
+
+    @PostMapping("/registration")
+    public String registerUser(@ModelAttribute Person person, Model model) throws Exception {
+        personService.create(person);
+        return "redirect:/login";
     }
 
     @GetMapping(value = "/transfer")

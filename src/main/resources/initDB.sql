@@ -12,7 +12,7 @@ balance double
 
 create table connections(
 ID int PRIMARY KEY AUTO_INCREMENT,
-owner_id integer(10),
+owner_id integer(10) NOT NULL,
 email varchar(25) NOT NULL,
 FOREIGN KEY (owner_id)
 REFERENCES users(ID)
