@@ -12,7 +12,10 @@ import com.open.paymybuddy.utils.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.log4j.Log4j2;
+
 @Service
+@Log4j2
 public class PersonConnectionsServiceImpl implements PersonConnectionsService {
 
 	@Autowired
@@ -39,6 +42,7 @@ public class PersonConnectionsServiceImpl implements PersonConnectionsService {
 		} else {
 			Person owner = personRepo.findByid(ownerID);
 			PersonConnection personConnection = new PersonConnection(friendsEmail, owner);
+			log.info("Created {}.", personConnection);
 			return personConnectionRepo.save(personConnection);
 		}
 	}

@@ -23,11 +23,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import lombok.extern.log4j.Log4j2;
 // TODO добавить transactional
 // TODO потестировать сценарий провала создания транзакции, выбросить экспешн перед сохранением транзакции в бд
 // и посмотреть запушится ли в базу данных измененный баланс пользователя.
 // для включения транзакций нужна @EnableTransactionManagement на классе где находится main
 @Service
+@Log4j2
 public class MoneyTransactionServiceImpl implements MoneyTransactionService {
 
     @Autowired
@@ -65,6 +68,7 @@ public class MoneyTransactionServiceImpl implements MoneyTransactionService {
             sender.setBalance(sender.getBalance().subtract(amount.multiply(tax)));
             MoneyTransaction mtrans = new MoneyTransaction(description, amount, sender, sender.getEmail(),
                     receiverEmail, amount.multiply(tax), LocalDateTime.now());
+            log.info("Created {}.", mtrans);
             return moneyTransactionRepo.save(mtrans);
         }
     }

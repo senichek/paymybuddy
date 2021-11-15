@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
@@ -36,5 +37,8 @@ public class PersonConnection extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference(value = "owner")
     @NotNull
+    @ToString.Exclude
+    /* This field results in error or exception when used in ToString method due to Lazy fetching.
+    Removing it from ToString() method */
     private Person owner;
 }

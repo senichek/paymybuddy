@@ -66,6 +66,12 @@
         <div class="text-center" style="margin-top: 50px">
           <button type="submit" class="btn btn-primary btn-lg">Register</button>
         </div>
+        <div class="text-center" style="margin-top: 10px">
+          <a href="/login" class="btn btn-link active" role="button" aria-pressed="true">Log in</a>
+        </div>
+        <div th:if="${userExists}" class="text-center" style="color: green">
+          This account exists. You can log in.
+        </div>
       </form>
     </div>
   </body>

@@ -22,6 +22,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
@@ -45,6 +46,7 @@ public class Person extends BaseEntity {
     @NotBlank
     @Size(min = 5, max = 250)
     @JsonIgnore
+    @ToString.Exclude
     private String password;
 
     @Column(name = "balance", nullable = false)
@@ -53,6 +55,9 @@ public class Person extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonManagedReference(value = "owner")
+    @ToString.Exclude
+    /* This field results in error or exception when used in ToString method due to Lazy fetching.
+    Removing it from ToString() method */
     private List<PersonConnection> connections;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sender")

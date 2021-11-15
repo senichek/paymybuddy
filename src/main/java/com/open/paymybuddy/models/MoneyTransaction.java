@@ -21,6 +21,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
@@ -43,6 +44,9 @@ public class MoneyTransaction extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference(value = "sender")
     @NotNull
+    @ToString.Exclude
+    /* This field results in error or exception when used in ToString method due to Lazy fetching.
+    Removing it from ToString() method */
     private Person sender;
 
     @Column(name = "sender_email", nullable = false)

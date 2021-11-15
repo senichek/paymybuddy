@@ -19,8 +19,9 @@
     <br>
     <br>
     <br>
-    <br>
-    Some kind of error has happened.
-
+    <div class="text-center">
+      <p th:text="${exception.message}"  style="color: rgb(206, 37, 37)"></p>
+      <a href="#" onclick="history.go(-1)">Go Back</a>
+    </div>
   </body>
 </html>
