@@ -63,8 +63,14 @@ public class MainController {
 
     @PostMapping("/registration")
     public String registerUser(@ModelAttribute Person person, Model model) throws Exception {
-        personService.create(person);
-        return "redirect:/login";
+        Person prs = personService.create(person);
+        // If a user with this email exists we return null.
+        if (prs == null) {
+            model.addAttribute("userExists", "Account exists. You can log in");
+            return "registration";
+        } else {
+            return "redirect:/login";
+        }
     }
 
     @GetMapping(value = "/transfer")
@@ -73,7 +79,8 @@ public class MainController {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(3);
 
-        List<MoneyTransaction> transactions = moneyTransactionService.getAllForLoggedIn(SecurityUtil.getLoggedInUser().getEmail());
+        List<MoneyTransaction> transactions = moneyTransactionService
+                .getAllForLoggedIn(SecurityUtil.getLoggedInUser().getEmail());
 
         Page<MoneyTransaction> transactionPage = moneyTransactionService
                 .findPaginated(PageRequest.of(currentPage - 1, pageSize), transactions);
@@ -86,20 +93,22 @@ public class MainController {
             model.addAttribute("pageNumbers", pageNumbers);
         }
 
-        List<PersonConnection> connections = personConnectionsService.getAllByOwnerID(SecurityUtil.getLoggedInUser().getId());
+        List<PersonConnection> connections = personConnectionsService
+                .getAllByOwnerID(SecurityUtil.getLoggedInUser().getId());
         model.addAttribute("connections", connections);
 
         return "transfer";
     }
 
     @PostMapping("/transfer")
-    public String moneyTransactionSubmit(@ModelAttribute MoneyTransaction mTransaction, Model model) throws Exception {
-        moneyTransactionService.create(SecurityUtil.getLoggedInUser().getId(), mTransaction.getReceiverEmail(), mTransaction.getAmount(), mTransaction.getDescription());
+    public String moneyTransactionSubmit(@ModelAttribute MoneyTransaction mTransaction) throws Exception {
+        moneyTransactionService.create(SecurityUtil.getLoggedInUser().getId(), mTransaction.getReceiverEmail(),
+                mTransaction.getAmount(), mTransaction.getDescription());
         return "redirect:/transfer";
     }
 
     @PostMapping("/connection")
-    public String connectionSubmit(@ModelAttribute PersonConnection pConnection, Model model) throws Exception {
+    public String connectionSubmit(@ModelAttribute PersonConnection pConnection) throws Exception {
         personConnectionsService.create(SecurityUtil.getLoggedInUser().getId(), pConnection.getEmail());
         return "redirect:/transfer";
     }
