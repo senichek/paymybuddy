@@ -1,5 +1,6 @@
 package com.open.paymybuddy.services;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -23,7 +24,7 @@ public class PersonServiceImpl implements PersonService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // TODO скорее всего не нужен вообще, удалить в будущем
+    // TODO delete later
     @Override
     public List<Person> getAll() {
         return personRepo.findAll();
@@ -39,6 +40,7 @@ public class PersonServiceImpl implements PersonService {
             return null;
         } else {
             person.setPassword(passwordEncoder.encode(person.getPassword()));
+            person.setBalance(new BigDecimal(0));
             created = personRepo.save(person);
             log.info("Created {}.", created);
             return created;

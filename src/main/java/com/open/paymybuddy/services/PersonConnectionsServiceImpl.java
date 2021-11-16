@@ -41,7 +41,8 @@ public class PersonConnectionsServiceImpl implements PersonConnectionsService {
 			throw new NotFoundException(String.format("Entity with email %s does not exist.", friendsEmail));
 		} else {
 			Person owner = personRepo.findByid(ownerID);
-			PersonConnection personConnection = new PersonConnection(friendsEmail, owner);
+			Person friend = personRepo.findByEmail(friendsEmail);
+			PersonConnection personConnection = new PersonConnection(friendsEmail, owner, friend);
 			log.info("Created {}.", personConnection);
 			return personConnectionRepo.save(personConnection);
 		}

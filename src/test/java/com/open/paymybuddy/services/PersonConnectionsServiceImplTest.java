@@ -21,11 +21,11 @@ public class PersonConnectionsServiceImplTest {
 
     @Test
     public void getAllByOwnerIDTest() {
-        PersonConnection conn1 = new PersonConnection("mike@gmail.com", new Person());
-        PersonConnection conn2 = new PersonConnection("carol@gmail.com", new Person());
+        PersonConnection conn1 = new PersonConnection("mike@gmail.com", new Person(), new Person());
+        PersonConnection conn2 = new PersonConnection("carol@gmail.com", new Person(), new Person());
         List<PersonConnection> expected = List.of(conn1, conn2);
         List<PersonConnection> fromService = personConnectionsService.getAllByOwnerID(1);
-        // Lazy fetching, this is why we do not compare Person inside of a Connection,
+        // Lazy fetching, this is why we do not compare Person (owner and friend) inside of a Connection,
         // we compare only emails.
         for (int i =0; i < expected.size(); i++) {
             assertEquals(expected.get(i).getEmail(), fromService.get(i).getEmail());
@@ -35,7 +35,7 @@ public class PersonConnectionsServiceImplTest {
     @Test
     @WithUserDetails("james@gmail.com") // see https://docs.spring.io/spring-security/site/docs/4.2.x/reference/html/test-method.html#test-method-withuserdetails
     public void createTest() throws Exception {
-        PersonConnection expected = new PersonConnection("mike@gmail.com", new Person());
+        PersonConnection expected = new PersonConnection("mike@gmail.com", new Person(), new Person());
         PersonConnection fromService = personConnectionsService.create(1, "mike@gmail.com");
         assertEquals(expected.getEmail(), fromService.getEmail());
     }

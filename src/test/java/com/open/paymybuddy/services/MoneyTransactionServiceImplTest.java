@@ -28,8 +28,12 @@ public class MoneyTransactionServiceImplTest {
         sender.setId(1);
         sender.setEmail("james@gmail.com");
 
+        Person receiver = new Person();
+        receiver.setId(3);
+        receiver.setEmail("carol@gmail.com");
+
         MoneyTransaction expected = new MoneyTransaction("Description", new BigDecimal(50), sender, 
-        "james@gmail.com", "carol@gmail.com", new BigDecimal(2.5), LocalDateTime.now());
+        receiver, "james@gmail.com", "carol@gmail.com", new BigDecimal(2.5), LocalDateTime.now());
 
         MoneyTransaction fromService = moneyTransactionService.create(1, "carol@gmail.com", new BigDecimal(50), "Description");
 

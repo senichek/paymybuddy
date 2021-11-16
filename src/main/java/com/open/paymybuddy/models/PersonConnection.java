@@ -28,7 +28,7 @@ import lombok.ToString;
 @Table(name = "connections")
 public class PersonConnection extends BaseEntity {
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "friend_email", nullable = false)
     @Email
     private String email;
 
@@ -41,4 +41,11 @@ public class PersonConnection extends BaseEntity {
     /* This field results in error or exception when used in ToString method due to Lazy fetching.
     Removing it from ToString() method */
     private Person owner;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "friend_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
+    @ToString.Exclude
+    private Person friend;
 }

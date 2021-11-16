@@ -49,6 +49,13 @@ public class MoneyTransaction extends BaseEntity {
     Removing it from ToString() method */
     private Person sender;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
+    @ToString.Exclude
+    private Person receiver;
+
     @Column(name = "sender_email", nullable = false)
     @NotBlank
     private String senderEmail;
