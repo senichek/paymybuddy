@@ -7,21 +7,27 @@ import javax.sql.DataSource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.open.paymybuddy.web.JacksonObjectMapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 @Configuration
 public class WebConfig {
-    // TODO move credentials to a file.
+    
+    @Autowired
+    private Environment env;
+    
     @Bean
     public DataSource dataSource() {
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder
-        .url("jdbc:mysql://localhost:3306/paymybuddy")
-        .username("root")
-        .password("rootroot");
+        // Getting DB credentials from the application.prperties file.
+        .url(env.getProperty("spring.datasource.url"))
+        .username(env.getProperty("spring.datasource.username"))
+        .password(env.getProperty("spring.datasource.password"));
         return dataSourceBuilder.build();
     }
 
