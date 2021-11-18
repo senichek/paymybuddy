@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import com.open.paymybuddy.models.MoneyTransaction;
 import com.open.paymybuddy.models.Person;
 import com.open.paymybuddy.utils.NotEnoughBalanceException;
@@ -13,9 +15,14 @@ import com.open.paymybuddy.utils.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 @SpringBootTest
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD) // Tests change the collection, this is why we have to reset the collection
 public class MoneyTransactionServiceImplTest {
 
     @Autowired
@@ -71,5 +78,37 @@ public class MoneyTransactionServiceImplTest {
         // Send zero amount.
         exception = assertThrows(Exception.class, () -> moneyTransactionService.create(1, "carol@gmail.com", new BigDecimal(0), "Description"));	
         assertTrue(exception.getMessage().contains("Amount cannot be null or negative."));	
+    }
+
+    @Test
+    @WithUserDetails("james@gmail.com")
+    public void getAllForLoggedInTest() throws Exception {
+        // We know that there are 10 transactions for james@gmail.com
+        List<MoneyTransaction> allForLoggedIn = moneyTransactionService.getAllForLoggedIn("james@gmail.com");
+        assertEquals(10, allForLoggedIn.size());
+        // Comparing some of the values.
+        allForLoggedIn.forEach(mTrans -> {
+            assertEquals("james@gmail.com", mTrans.getSenderEmail());
+            assertEquals("carol@gmail.com", mTrans.getReceiverEmail());
+            assertEquals(BigDecimal.valueOf(20.0), mTrans.getAmount());
+        });
+    }
+
+    @Test
+    @WithUserDetails("james@gmail.com")
+    public void getAllForLoggedInWithExceptionTest() throws Exception {
+        Exception exception = assertThrows(Exception.class, () -> moneyTransactionService.getAllForLoggedIn("carol@gmail.com"));
+        assertTrue(exception.getMessage().contains("Data Integrity Exception."));
+    }
+
+    @Test
+    @WithUserDetails("james@gmail.com")
+    public void findPaginatedTest() throws Exception {
+        List<MoneyTransaction> allForLoggedIn = moneyTransactionService.getAllForLoggedIn("james@gmail.com");
+        // It must return the transaction with ID 6, 7 and 8.
+        Page<MoneyTransaction> findPaginated = moneyTransactionService.findPaginated(PageRequest.of(1, 3), allForLoggedIn);
+        assertEquals(8, findPaginated.getContent().get(0).getId());
+        assertEquals(7, findPaginated.getContent().get(1).getId());
+        assertEquals(6, findPaginated.getContent().get(2).getId());
     }
 }

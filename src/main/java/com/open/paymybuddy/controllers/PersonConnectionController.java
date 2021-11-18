@@ -1,34 +1,43 @@
 package com.open.paymybuddy.controllers;
 
 import java.util.List;
-
 import com.open.paymybuddy.models.PersonConnection;
 import com.open.paymybuddy.services.PersonConnectionsService;
+import com.open.paymybuddy.utils.NotFoundException;
+import com.open.paymybuddy.utils.SecurityUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
-
-@RestController
+@Controller
 public class PersonConnectionController {
 
     @Autowired
     PersonConnectionsService personConnectionsService;
 
-    /* @PostMapping(value = "/transaction/{senderID}/{receiverEmail}/{amount}")
-    public ResponseEntity<MoneyTransaction> create(
-        @PathVariable("senderID") Integer id,
-        @PathVariable("receiverEmail") String receiverEmail, 
-        @PathVariable("amount") BigDecimal amount) throws Exception {
-        return new ResponseEntity<>(moneyTransactionService.create(id, receiverEmail, amount), HttpStatus.OK); 
-    } */
+    @GetMapping(value = "/connections")
+    public String showConnections(Model model) {
+        List<PersonConnection> connections = personConnectionsService.getAllByOwnerID(SecurityUtil.getLoggedInUser().getId());
+        model.addAttribute("connections", connections);
+        return "connections";
+    }
 
-    @GetMapping(value="/connection/{ownerID}")
-    public ResponseEntity<List<PersonConnection>> getAllByOwnerID(@PathVariable("ownerID") Integer id) {
-        return new ResponseEntity<>(personConnectionsService.getAllByOwnerID(id), HttpStatus.OK);
+    @GetMapping(value = "/connections/{id}")
+    public String deleteConnection(@PathVariable Integer id, Model model) throws NotFoundException {
+        personConnectionsService.deleteByConnectionID(id);
+        List<PersonConnection> connections = personConnectionsService.getAllByOwnerID(SecurityUtil.getLoggedInUser().getId());
+        model.addAttribute("connections", connections);
+        return "redirect:/connections";
+    } 
+
+    @PostMapping("/connection")
+    public String connectionSubmit(@ModelAttribute PersonConnection pConnection) throws Exception {
+        personConnectionsService.create(SecurityUtil.getLoggedInUser().getId(), pConnection.getEmail());
+        return "redirect:/transfer";
     }
 }

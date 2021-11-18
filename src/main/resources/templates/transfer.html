@@ -11,7 +11,7 @@
       crossorigin="anonymous"
     />
     
-    <link th:href="@{main.css}" rel="stylesheet" />
+    <link th:href="@{/main.css}" rel="stylesheet" />
 
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -70,6 +70,7 @@
       <option value="">SELECT CONNECTION</option>
       <tr th:each="conns: ${connections}">
         <option><td th:text="${conns.email}" ></td></option>
+        
     </select>
   <input type="text" name="description" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" placeholder="Description" required>
   <input type="number" name="amount" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" placeholder="Amount" required>

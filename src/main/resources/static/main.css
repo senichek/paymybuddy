@@ -108,3 +108,29 @@ ul {
   li a:hover {
     background-color:#61b95a;
   }
+
+   /* Profile Page */
+   .profile-container {
+     display: flex;
+     margin-left: 40%;
+     margin-right: auto;
+     margin-top: 3%;
+   }
+
+   .personal-info-div {
+      border: solid rgb(0, 201, 67);
+      border-radius: 10px;
+      margin-right: 10px;
+      padding: 6%;
+      padding-top: 4%;
+      min-width: 300px;
+   }
+
+   .balance-div {
+    border: solid rgb(32, 7, 65);
+ }
+
+ .profile-tr {
+  height: 45px;
+  font-size: large;
+}

@@ -7,13 +7,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import com.open.paymybuddy.models.Person;
 import com.open.paymybuddy.models.PersonConnection;
+import com.open.paymybuddy.utils.NotFoundException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 @SpringBootTest
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD) // Tests change the collection, this is why we have to reset the collection
 public class PersonConnectionsServiceImplTest {
 
     @Autowired
@@ -48,5 +52,23 @@ public class PersonConnectionsServiceImplTest {
 
         exception = assertThrows(Exception.class, () -> personConnectionsService.create(1, "nonExistant@gmail.com"));
         assertTrue(exception.getMessage().contains("Entity with email nonExistant@gmail.com does not exist."));
+    }
+
+    @Test
+    @WithUserDetails("james@gmail.com")
+    public void deleteTest() throws NotFoundException {
+        PersonConnection deleted = personConnectionsService.deleteByConnectionID(2);
+        assertEquals(deleted.getEmail(), "carol@gmail.com");
+        // After the deleteion there is going to be only one 
+        // entry in the connection list of James
+        assertEquals(1, personConnectionsService.getAllByOwnerID(1).size());
+        
+    }
+
+    @Test
+    @WithUserDetails("james@gmail.com")
+    public void deleteWithExceptionTest() throws NotFoundException {
+        Exception exception = assertThrows(NotFoundException.class, () -> personConnectionsService.deleteByConnectionID(4));
+        assertTrue(exception.getMessage().contains("Entity with id 4 does not exist."));
     }
 }

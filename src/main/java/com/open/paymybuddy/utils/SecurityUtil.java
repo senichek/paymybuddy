@@ -7,7 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SecurityUtil {
-    // TODO удалить
+    // TODO delete later
     public static final Integer LOGGED_IN_USER = 1;
     public static final String LOGGED_IN_USER_EMAIL = "james@gmail.com";
 

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Pay My Buddy</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+
+    <link th:href="@{/main.css}" rel="stylesheet" />
+
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+
+  </head>
+  <div th:insert="fragments.html :: navigation"></div> <!-- Navigation Bar, we use Thymeleaf fragments here. -->
+  <body>
+    <div class="profile-container">
+      <div class="personal-info-div">
+        <table>
+          <tbody>
+          <tr class="profile-tr">
+            <td>Name:</td>
+            <td th:text="${currentUser.name}" >
+          </tr>
+          <tr class="profile-tr">
+            <td>Email:</td>
+            <td th:text="${currentUser.email}" >
+          </tr>
+          <tr class="profile-tr">
+            <td>Password:</td>
+            <td>Hidden</td>
+          </tr>
+          <tr class="profile-tr" style="font-weight: bold">
+            <td>BALANCE:</td>
+            <td th:text="${currentUser.balance}" >
+          </tr>
+            </tbody>
+        </table>
+        <div style="margin-bottom: 10px">
+          <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#personalInfoModal">Edit Info</button>
+        </div>
+        <div style="margin-bottom: 10px">
+          <div class="text-center"><a href="/connections">Manage Connections</a></div>
+        </div>
+        <div style="margin-bottom: 10px">
+          <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#creditCardModal">Charge up by Card</button>
+        </div>
+        <div style="margin-bottom: 10px">
+          <button type="button" class="btn btn-dark btn-lg" data-toggle="modal" data-target="#ribModal">Charge up by RIB</button>
+        </div>
+        <div style="margin-bottom: 10px">
+          <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#bankModal">Payout to bank account</button>
+        </div>
+      <!-- Modal for Personal Info-->
+      <form th:action="@{/profile}" th:object="${person}" method="post">
+      <div class="modal" id="personalInfoModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Edit Info</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              </button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" name="id" class="form-control mb-2 mr-sm-2" th:value=${currentUser.id}>
+              <input type="text" name="name" class="form-control mb-2 mr-sm-2" th:value=${currentUser.name} required>
+              <input type="email" name="email" class="form-control mb-2 mr-sm-2" th:value=${currentUser.email} required>
+              <input type="password" name="password" class="form-control mb-2 mr-sm-2" placeholder="Password" aria-describedby="passwordHelpBlock">
+              <small id="passwordHelpBlock" class="form-text text-muted">
+                Leave the password field empty if you don't want to change the password.
+              </small>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Save</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <!-- Modal for Credit Card -->
+    <form th:action="@{/profile/balanceincr}" th:object="${person}" method="post">
+      <div class="modal" id="creditCardModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Enter Credit Card Details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              </button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" name="id" class="form-control mb-2 mr-sm-2" th:value=${currentUser.id}>
+              <input type="text" name="name" class="form-control mb-2 mr-sm-2" value="3715-2801-3333-5555" placeholder="Card number" required>
+              <input type="text" name="email" class="form-control mb-2 mr-sm-2" value="12/2022" placeholder="Expiration date (mm/YYYY)" required>
+              <input type="password" name="cvv" class="form-control mb-2 mr-sm-2" value="555" placeholder="CVV">
+              <input type="number" name="balance" class="form-control mb-2 mr-sm-2" placeholder="Amount">
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Save</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <!-- Modal for RIB -->
+    <form th:action="@{/profile/balanceincr}" th:object="${person}" method="post">
+      <div class="modal" id="ribModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Enter RIB</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              </button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" name="id" class="form-control mb-2 mr-sm-2" th:value=${currentUser.id}>
+              <input type="text" name="name" class="form-control mb-2 mr-sm-2" value="FR76 XXXXXXXXXXXX" required>
+              <input type="text" name="email" class="form-control mb-2 mr-sm-2" value="BIC xxxxxx" required>
+              <input type="number" name="balance" class="form-control mb-2 mr-sm-2" placeholder="Amount">
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Save</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <!-- Modal for Bank account payout -->
+    <form th:action="@{/profile/balancedecr}" th:object="${person}" method="post">
+      <div class="modal" id="bankModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Enter bank account details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              </button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" name="id" class="form-control mb-2 mr-sm-2" th:value=${currentUser.id}>
+              <input type="text" name="name" class="form-control mb-2 mr-sm-2" value="My Bank Account Number (1111-2222-333)" required>
+              <input type="number" name="balance" class="form-control mb-2 mr-sm-2" placeholder="Amount">
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Save</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

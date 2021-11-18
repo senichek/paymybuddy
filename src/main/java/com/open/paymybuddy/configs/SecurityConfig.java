@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
                // .antMatchers("/admin/**", "/rest/admin/**").hasRole("ADMIN")
-                .antMatchers("/", "/home", "/transfer" ,"/rest/**").authenticated()
+                .antMatchers("/", "/home", "/transfer", "/profile/**", "/connections").authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login") //custom login page, login view must be also returned by controller

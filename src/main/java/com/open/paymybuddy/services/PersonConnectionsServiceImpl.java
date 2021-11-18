@@ -2,6 +2,8 @@ package com.open.paymybuddy.services;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import com.open.paymybuddy.models.Person;
 import com.open.paymybuddy.models.PersonConnection;
 import com.open.paymybuddy.repos.PersonConnectionsRepo;
@@ -30,6 +32,7 @@ public class PersonConnectionsServiceImpl implements PersonConnectionsService {
 	}
 
 	@Override
+	@Transactional
 	public PersonConnection create(Integer ownerID, String friendsEmail) throws Exception {
 		// TODO добавить проверку на то есть ли друг уже в списке друзей, если есть,
 		// то ничего не делать или добавить снова, но чтобы в списке не было дубликатов.
@@ -45,6 +48,19 @@ public class PersonConnectionsServiceImpl implements PersonConnectionsService {
 			PersonConnection personConnection = new PersonConnection(friendsEmail, owner, friend);
 			log.info("Created {}.", personConnection);
 			return personConnectionRepo.save(personConnection);
+		}
+	}
+
+	@Override
+	public PersonConnection deleteByConnectionID(Integer id) throws NotFoundException {
+		PersonConnection pConnection = personConnectionRepo.findByid(id);
+		if (pConnection == null) {
+			throw new NotFoundException(String.format("Entity with id %s does not exist.", id));
+		}
+		 else {
+			personConnectionRepo.deleteByConnectionID(pConnection.getId());
+			log.info("Deleted {}.", pConnection);
+			return pConnection;
 		}
 	}
 }

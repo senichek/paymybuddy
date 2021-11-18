@@ -83,7 +83,7 @@ public class MoneyTransactionServiceImpl implements MoneyTransactionService {
 
     @Override
     public List<MoneyTransaction> getAllForLoggedIn(String emailOfLoggedInUser) throws Exception {
-        if (SecurityUtil.getLoggedInUser().getEmail() != emailOfLoggedInUser) {
+        if (!SecurityUtil.getLoggedInUser().getEmail().equals(emailOfLoggedInUser)) {
             throw new Exception("Data Integrity Exception.");
         }
         List<MoneyTransaction> result = moneyTransactionRepo.getAllForLoggedIn(SecurityUtil.getLoggedInUser().getId());
