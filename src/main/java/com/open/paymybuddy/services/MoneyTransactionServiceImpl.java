@@ -31,10 +31,10 @@ import lombok.extern.log4j.Log4j2;
 public class MoneyTransactionServiceImpl implements MoneyTransactionService {
 
     @Autowired
-    PersonRepo personRepo;
+    private PersonRepo personRepo;
 
     @Autowired
-    MoneyTransactionRepo moneyTransactionRepo;
+    private MoneyTransactionRepo moneyTransactionRepo;
 
     @Override
     @Transactional

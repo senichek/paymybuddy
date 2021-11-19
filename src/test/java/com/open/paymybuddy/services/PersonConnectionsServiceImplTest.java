@@ -1,6 +1,8 @@
 package com.open.paymybuddy.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -39,8 +41,8 @@ public class PersonConnectionsServiceImplTest {
     @Test
     @WithUserDetails("james@gmail.com") // see https://docs.spring.io/spring-security/site/docs/4.2.x/reference/html/test-method.html#test-method-withuserdetails
     public void createTest() throws Exception {
-        PersonConnection expected = new PersonConnection("mike@gmail.com", new Person(), new Person());
-        PersonConnection fromService = personConnectionsService.create(1, "mike@gmail.com");
+        PersonConnection expected = new PersonConnection("ron@gmail.com", new Person(), new Person());
+        PersonConnection fromService = personConnectionsService.create(1, "ron@gmail.com");
         assertEquals(expected.getEmail(), fromService.getEmail());
     }
 
@@ -52,6 +54,15 @@ public class PersonConnectionsServiceImplTest {
 
         exception = assertThrows(Exception.class, () -> personConnectionsService.create(1, "nonExistant@gmail.com"));
         assertTrue(exception.getMessage().contains("Entity with email nonExistant@gmail.com does not exist."));
+    }
+
+    @Test
+    @WithUserDetails("james@gmail.com")
+    public void createWithDuplicate() throws Exception {
+        // You cannot add yourself or a person who is already your friend to your connections.
+        assertNull(personConnectionsService.create(1, "james@gmail.com").getEmail());
+        // mike@gmail.com is already present in James' connections.
+        assertNull(personConnectionsService.create(1, "mike@gmail.com").getEmail());
     }
 
     @Test
@@ -70,5 +81,24 @@ public class PersonConnectionsServiceImplTest {
     public void deleteWithExceptionTest() throws NotFoundException {
         Exception exception = assertThrows(NotFoundException.class, () -> personConnectionsService.deleteByConnectionID(4));
         assertTrue(exception.getMessage().contains("Entity with id 4 does not exist."));
+    }
+
+    @Test
+    @WithUserDetails("james@gmail.com")
+    public void isPresent() {
+        Person owner = new Person();
+        Person friend = new Person();
+        friend.setEmail("ron@gmail.com");
+        List<PersonConnection> ownerConnections = List.of(new PersonConnection("mike@gmail.com", null, null), new PersonConnection("carol@gmail.com", null, null));
+        owner.setConnections(ownerConnections);
+        // Ron is not present in James' connections.
+        assertFalse(personConnectionsService.isPresentInConnections(owner, friend));
+        // Mike and Carol and James himself are present in James' connections.
+        friend.setEmail("mike@gmail.com");
+        assertTrue(personConnectionsService.isPresentInConnections(owner, friend));
+        friend.setEmail("carol@gmail.com");
+        assertTrue(personConnectionsService.isPresentInConnections(owner, friend));
+        friend.setEmail("james@gmail.com");
+        assertTrue(personConnectionsService.isPresentInConnections(owner, friend));
     }
 }

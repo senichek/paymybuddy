@@ -21,10 +21,10 @@ import lombok.extern.log4j.Log4j2;
 public class PersonConnectionsServiceImpl implements PersonConnectionsService {
 
 	@Autowired
-	PersonConnectionsRepo personConnectionRepo;
+	private PersonConnectionsRepo personConnectionRepo;
 
 	@Autowired
-	PersonRepo personRepo;
+	private PersonRepo personRepo;
 
 	@Override
 	public List<PersonConnection> getAllByOwnerID(Integer id) {
@@ -34,20 +34,23 @@ public class PersonConnectionsServiceImpl implements PersonConnectionsService {
 	@Override
 	@Transactional
 	public PersonConnection create(Integer ownerID, String friendsEmail) throws Exception {
-		// TODO добавить проверку на то есть ли друг уже в списке друзей, если есть,
-		// то ничего не делать или добавить снова, но чтобы в списке не было дубликатов.
+		PersonConnection personConnection = new PersonConnection();
+		Person friend = personRepo.findByEmail(friendsEmail);
 		if (SecurityUtil.getLoggedInUser().getId() != ownerID) {
 			throw new Exception("Data Integrity Exception.");
 			// You can add to connections (to firends) only users that exist in DB, i.e. the
 			// registered ones.
-		} else if (personRepo.findByEmail(friendsEmail) == null) {
+		} else if (friend == null) {
 			throw new NotFoundException(String.format("Entity with email %s does not exist.", friendsEmail));
 		} else {
 			Person owner = personRepo.findByid(ownerID);
-			Person friend = personRepo.findByEmail(friendsEmail);
-			PersonConnection personConnection = new PersonConnection(friendsEmail, owner, friend);
-			log.info("Created {}.", personConnection);
-			return personConnectionRepo.save(personConnection);
+			if (!isPresentInConnections(owner, friend)) {
+				friend = personRepo.findByEmail(friendsEmail);
+				personConnection = new PersonConnection(friendsEmail, owner, friend);
+				personConnectionRepo.save(personConnection);
+				log.info("Created {}.", personConnection);
+			}
+			return personConnection;
 		}
 	}
 
@@ -62,5 +65,22 @@ public class PersonConnectionsServiceImpl implements PersonConnectionsService {
 			log.info("Deleted {}.", pConnection);
 			return pConnection;
 		}
+	}
+
+	@Override
+	public Boolean isPresentInConnections(Person owner, Person friend) {
+		Boolean match = false;
+		// The logged-in user cannot add himself to his own connections.
+		// We consider him as being present in the friend's list of his own by default
+		// to prevent his from being added to his own friend's (connections) list.
+		if (friend.getEmail().equals(SecurityUtil.getLoggedInUser().getEmail())) {
+			match = true;
+		}
+		for (PersonConnection con : owner.getConnections()) {
+			if (con.getEmail().equals(friend.getEmail())) {
+				match = true;
+			}
+		}
+		return match;
 	}
 }

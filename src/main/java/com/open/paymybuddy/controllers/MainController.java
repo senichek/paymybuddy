@@ -1,6 +1,5 @@
 package com.open.paymybuddy.controllers;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,11 +35,11 @@ public class MainController {
     @Autowired
     PersonService personService;
 
-    // TODO выкинуть эксепшн если логинится несуществующий пользователь
-    // или неверный пароль, иначе возникает проблема на странице с ошибками.
-    // TODO перенести Transactional в репозитории
     @GetMapping(value = "/login")
-    public String login() {
+    public String login(@RequestParam(name="error", required=false) String error, Model model)  {
+        if (error!=null && error.equals("true")) {
+            model.addAttribute("error", "Failed to log you in. Make sure the account exists and the credentials are correct.");
+        }
         return "login";
     }
 

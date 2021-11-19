@@ -1,11 +1,6 @@
 package com.open.paymybuddy.controllers;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.open.paymybuddy.models.Person;
-import com.open.paymybuddy.models.PersonConnection;
-import com.open.paymybuddy.services.PersonConnectionsService;
 import com.open.paymybuddy.services.PersonService;
 import com.open.paymybuddy.utils.NotFoundException;
 import com.open.paymybuddy.utils.SecurityUtil;

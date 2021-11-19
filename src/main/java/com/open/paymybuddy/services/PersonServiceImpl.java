@@ -1,7 +1,6 @@
 package com.open.paymybuddy.services;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -21,7 +20,7 @@ import lombok.extern.log4j.Log4j2;
 public class PersonServiceImpl implements PersonService {
 
     @Autowired
-    PersonRepo personRepo;
+    private PersonRepo personRepo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;

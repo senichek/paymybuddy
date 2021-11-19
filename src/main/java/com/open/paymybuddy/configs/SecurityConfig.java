@@ -1,7 +1,6 @@
 package com.open.paymybuddy.configs;
 
 import com.open.paymybuddy.security.UserPrincipalDetailsService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,21 +27,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
-               // .antMatchers("/admin/**", "/rest/admin/**").hasRole("ADMIN")
                 .antMatchers("/", "/home", "/transfer", "/profile/**", "/connections").authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login") //custom login page, login view must be also returned by controller
                 .successForwardUrl("/home") //there should be postMapping on the redirect page
-                .failureUrl("/error")
+                .failureUrl("/login?error=true")
                 .permitAll()
                 .and()
                 .csrf().disable()
-                //.csrf().ignoringAntMatchers("/rest/**")
                 .logout()
                 .permitAll()
-               // .and()
-               // .exceptionHandling().accessDeniedPage("/accessDenied")
                 .and()
                 .httpBasic();
     }
