@@ -1,15 +1,14 @@
 package com.open.paymybuddy.controllers;
 
-import com.open.paymybuddy.configs.SecurityConfig;
 import com.open.paymybuddy.models.MoneyTransaction;
 import com.open.paymybuddy.models.Person;
 import com.open.paymybuddy.security.UserPrincipalDetailsService;
 import com.open.paymybuddy.services.MoneyTransactionService;
 import com.open.paymybuddy.services.PersonConnectionsService;
 import com.open.paymybuddy.services.PersonService;
-import com.open.paymybuddy.utils.GlobalExceptionHandler;
 import com.open.paymybuddy.utils.SecurityUtil;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,10 +49,25 @@ public class MainControllerTest {
     private UserPrincipalDetailsService userPrincipalDetailsService;
 
     @MockBean
-    private GlobalExceptionHandler globalExceptionHandler;
-
-    @MockBean
     private SecurityUtil securityUtil;
+
+    private static Person sender;
+    private static Person receiver;
+    private static MoneyTransaction mTrans;
+
+    @BeforeAll
+    private static void setup() {
+        sender = new Person();
+        sender.setId(1);
+        sender.setEmail("james@gmail.com");
+
+        receiver = new Person();
+        receiver.setId(3);
+        receiver.setEmail("carol@gmail.com");
+
+        mTrans = new MoneyTransaction("Description", new BigDecimal(50), sender, 
+        receiver, "james@gmail.com", "carol@gmail.com", new BigDecimal(2.5), LocalDateTime.now());
+    }
     
     @Test
     public void loginTest() throws Exception {
@@ -126,17 +140,6 @@ public class MainControllerTest {
     @Test
     @WithMockUser(username = "james@gmail.com", password = "pass111")
     public void listTransactionsAndConnectionsTest() throws Exception {
-        Person sender = new Person();
-        sender.setId(1);
-        sender.setEmail("james@gmail.com");
-
-        Person receiver = new Person();
-        receiver.setId(3);
-        receiver.setEmail("carol@gmail.com");
-
-        MoneyTransaction mTrans = new MoneyTransaction("Description", new BigDecimal(50), sender, 
-        receiver, "james@gmail.com", "carol@gmail.com", new BigDecimal(2.5), LocalDateTime.now());
-
         when(securityUtil.getLoggedInUser()).thenReturn(sender);
         when(moneyTransactionService.getAllForLoggedIn(any(String.class))).thenReturn(List.of(mTrans));
     
@@ -152,18 +155,7 @@ public class MainControllerTest {
     @Test
     @WithMockUser(username = "james@gmail.com", password = "pass111")
     public void moneyTransactionSubmitTest() throws Exception {
-        Person sender = new Person();
-        sender.setId(1);
-        sender.setEmail("james@gmail.com");
-
-        Person receiver = new Person();
-        receiver.setId(3);
-        receiver.setEmail("carol@gmail.com");
-
         when(securityUtil.getLoggedInUser()).thenReturn(sender);
-
-        MoneyTransaction mTrans = new MoneyTransaction("Description", new BigDecimal(50), sender, 
-        receiver, "james@gmail.com", "carol@gmail.com", new BigDecimal(2.5), LocalDateTime.now());
 
         when(moneyTransactionService.create(any(Integer.class), any(String.class), any(BigDecimal.class), 
                                                 any(String.class))).thenReturn(mTrans);
