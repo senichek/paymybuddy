@@ -25,6 +25,9 @@ public class PersonServiceImpl implements PersonService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private SecurityUtil securityUtil;
+
     @Override
     @Transactional
     public Person create(Person person) {
@@ -48,7 +51,7 @@ public class PersonServiceImpl implements PersonService {
         Boolean changeDetected = false;
         // Check if we try to update a user different from the one
         // who is logged in now. We must only update the logged-in user.
-        if (SecurityUtil.getLoggedInUser().getId() != person.getId()) {
+        if (securityUtil.getLoggedInUser().getId() != person.getId()) {
             throw new Exception("Data Integrity Exception.");
         } else {
             // If the change of name is detected - update the name.
@@ -90,12 +93,12 @@ public class PersonServiceImpl implements PersonService {
         Person toUpdate = personRepo.findByid(person.getId());
         // Check if we try to update the balance of the user different from 
         // the one who is logged in now. We must only update the logged-in user.
-        if (SecurityUtil.getLoggedInUser().getId() != person.getId()) {
+        if (securityUtil.getLoggedInUser().getId() != person.getId()) {
             throw new Exception("Data Integrity Exception.");
         }
         // If amount is zero or negative
-        else if (person.getBalance().compareTo(new BigDecimal(0)) <= 0) {
-            throw new Exception("Amount cannot be null or negative.");
+        else if (person.getBalance() == null || person.getBalance().compareTo(new BigDecimal(0)) <= 0) {
+            throw new Exception("Amount cannot be null, zero or negative.");
         } else {
             toUpdate.setBalance(toUpdate.getBalance().add(person.getBalance()));
             personRepo.save(toUpdate);
@@ -109,12 +112,12 @@ public class PersonServiceImpl implements PersonService {
         Person toUpdate = personRepo.findByid(person.getId());
         // Check if we try to update the balance of the user different from 
         // the one who is logged in now. We must only update the logged-in user.
-        if (SecurityUtil.getLoggedInUser().getId() != person.getId()) {
+        if (securityUtil.getLoggedInUser().getId() != person.getId()) {
             throw new Exception("Data Integrity Exception.");
         }
         // If amount is zero or negative
-        else if (person.getBalance().compareTo(new BigDecimal(0)) <= 0) {
-            throw new Exception("Amount cannot be null or negative.");
+        else if (person.getBalance() == null || person.getBalance().compareTo(new BigDecimal(0)) <= 0) {
+            throw new Exception("Amount cannot be null, zero or negative.");
         } 
         else if (toUpdate.getBalance().compareTo(person.getBalance()) < 0) {
             throw new Exception("Not enough balance for payout. Decrease the payout amount.");

@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ProfileController {
 
     @Autowired
-    PersonService personService;
+    private PersonService personService;
+
+    @Autowired
+    private SecurityUtil securityUtil;
     
     @GetMapping(value = "/profile")
     public String showProfile(Model model) throws NotFoundException {
-        Person currentUser = personService.findById(SecurityUtil.getLoggedInUser().getId());
+        Person currentUser = personService.findById(securityUtil.getLoggedInUser().getId());
         model.addAttribute("currentUser", currentUser);
         return "profile";
     }

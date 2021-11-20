@@ -27,13 +27,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MainController {
 
     @Autowired
-    MoneyTransactionService moneyTransactionService;
+    private MoneyTransactionService moneyTransactionService;
 
     @Autowired
-    PersonConnectionsService personConnectionsService;
+    private PersonConnectionsService personConnectionsService;
 
     @Autowired
-    PersonService personService;
+    private PersonService personService;
+
+    @Autowired
+    private SecurityUtil securityUtil;
 
     @GetMapping(value = "/login")
     public String login(@RequestParam(name="error", required=false) String error, Model model)  {
@@ -45,7 +48,6 @@ public class MainController {
 
     @PostMapping(value = "/home")
     public String homePage() {
-        // return "home";
         return "redirect:/transfer";
     }
 
@@ -83,7 +85,7 @@ public class MainController {
         int pageSize = size.orElse(3);
 
         List<MoneyTransaction> transactions = moneyTransactionService
-                .getAllForLoggedIn(SecurityUtil.getLoggedInUser().getEmail());
+                .getAllForLoggedIn(securityUtil.getLoggedInUser().getEmail());
 
         Page<MoneyTransaction> transactionPage = moneyTransactionService
                 .findPaginated(PageRequest.of(currentPage - 1, pageSize), transactions);
@@ -97,7 +99,7 @@ public class MainController {
         }
 
         List<PersonConnection> connections = personConnectionsService
-                .getAllByOwnerID(SecurityUtil.getLoggedInUser().getId());
+                .getAllByOwnerID(securityUtil.getLoggedInUser().getId());
         model.addAttribute("connections", connections);
 
         return "transfer";
@@ -105,7 +107,7 @@ public class MainController {
 
     @PostMapping("/transfer")
     public String moneyTransactionSubmit(@ModelAttribute MoneyTransaction mTransaction) throws Exception {
-        moneyTransactionService.create(SecurityUtil.getLoggedInUser().getId(), mTransaction.getReceiverEmail(),
+        moneyTransactionService.create(securityUtil.getLoggedInUser().getId(), mTransaction.getReceiverEmail(),
                 mTransaction.getAmount(), mTransaction.getDescription());
         return "redirect:/transfer";
     }

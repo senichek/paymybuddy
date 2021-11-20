@@ -36,10 +36,13 @@ public class MoneyTransactionServiceImpl implements MoneyTransactionService {
     @Autowired
     private MoneyTransactionRepo moneyTransactionRepo;
 
+    @Autowired
+    private SecurityUtil securityUtil;
+
     @Override
     @Transactional
     public MoneyTransaction create(Integer senderID, String receiverEmail, BigDecimal amount, String description) throws Exception {
-        if (SecurityUtil.getLoggedInUser().getId() != senderID) {
+        if (securityUtil.getLoggedInUser().getId() != senderID) {
             throw new Exception("Data Integrity Exception.");
         }
         Person sender = personRepo.findByid(senderID);
@@ -83,10 +86,10 @@ public class MoneyTransactionServiceImpl implements MoneyTransactionService {
 
     @Override
     public List<MoneyTransaction> getAllForLoggedIn(String emailOfLoggedInUser) throws Exception {
-        if (!SecurityUtil.getLoggedInUser().getEmail().equals(emailOfLoggedInUser)) {
+        if (!securityUtil.getLoggedInUser().getEmail().equals(emailOfLoggedInUser)) {
             throw new Exception("Data Integrity Exception.");
         }
-        List<MoneyTransaction> result = moneyTransactionRepo.getAllForLoggedIn(SecurityUtil.getLoggedInUser().getId());
+        List<MoneyTransaction> result = moneyTransactionRepo.getAllForLoggedIn(securityUtil.getLoggedInUser().getId());
         Collections.sort(result, new Comparator<MoneyTransaction>() {
             public int compare(MoneyTransaction o1, MoneyTransaction o2) {
                 return o2.getDateTime().compareTo(o1.getDateTime());

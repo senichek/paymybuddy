@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.open.paymybuddy.utils.SecurityUtil;
 import com.open.paymybuddy.web.JacksonObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,10 @@ public class WebConfig {
     @Bean
     public ObjectMapper jacksonObjectMapper() {
         return JacksonObjectMapper.getMapper();
+    }
+
+    @Bean
+    public SecurityUtil securityUtil() {
+        return new SecurityUtil();
     }
 }

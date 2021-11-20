@@ -20,7 +20,7 @@
     <br>
     <br>
     <br>
-    <div class="text-center">
+    <div class="text-center" th:if="${exception}">
       <p th:text="${exception.message}"  style="color: rgb(206, 37, 37)"></p>
       <a href="#" onclick="history.go(-1)">Go Back</a>
     </div>

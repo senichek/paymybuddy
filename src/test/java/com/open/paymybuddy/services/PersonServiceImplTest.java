@@ -155,7 +155,7 @@ public class PersonServiceImplTest {
         prs.setId(1);
         prs.setBalance(BigDecimal.valueOf(0));
         exception = assertThrows(Exception.class, () -> personService.increaseBalance(prs));
-        assertTrue(exception.getMessage().contains("Amount cannot be null or negative."));
+        assertTrue(exception.getMessage().contains("Amount cannot be null, zero or negative."));
     }
 
     @Test
@@ -182,7 +182,7 @@ public class PersonServiceImplTest {
         prs.setId(1);
         prs.setBalance(new BigDecimal(0));
         exception = assertThrows(Exception.class, () -> personService.decreaseBalance(prs));
-        assertTrue(exception.getMessage().contains("Amount cannot be null or negative."));
+        assertTrue(exception.getMessage().contains("Amount cannot be null, zero or negative."));
         
         // The user with ID=1 has the balance of 120, we try to payout 121.
         prs.setBalance(BigDecimal.valueOf(121));

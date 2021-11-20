@@ -18,11 +18,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class PersonConnectionController {
 
     @Autowired
-    PersonConnectionsService personConnectionsService;
+    private PersonConnectionsService personConnectionsService;
+
+    @Autowired
+    private SecurityUtil securityUtil;
 
     @GetMapping(value = "/connections")
     public String showConnections(Model model) {
-        List<PersonConnection> connections = personConnectionsService.getAllByOwnerID(SecurityUtil.getLoggedInUser().getId());
+        List<PersonConnection> connections = personConnectionsService.getAllByOwnerID(securityUtil.getLoggedInUser().getId());
         model.addAttribute("connections", connections);
         return "connections";
     }
@@ -30,14 +33,14 @@ public class PersonConnectionController {
     @GetMapping(value = "/connections/{id}")
     public String deleteConnection(@PathVariable Integer id, Model model) throws NotFoundException {
         personConnectionsService.deleteByConnectionID(id);
-        List<PersonConnection> connections = personConnectionsService.getAllByOwnerID(SecurityUtil.getLoggedInUser().getId());
+        List<PersonConnection> connections = personConnectionsService.getAllByOwnerID(securityUtil.getLoggedInUser().getId());
         model.addAttribute("connections", connections);
         return "redirect:/connections";
     } 
 
     @PostMapping("/connection")
     public String connectionSubmit(@ModelAttribute PersonConnection pConnection) throws Exception {
-        personConnectionsService.create(SecurityUtil.getLoggedInUser().getId(), pConnection.getEmail());
+        personConnectionsService.create(securityUtil.getLoggedInUser().getId(), pConnection.getEmail());
         return "redirect:/transfer";
     }
 }
