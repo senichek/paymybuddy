@@ -52,7 +52,7 @@ public class Person extends BaseEntity {
     @Column(name = "balance", nullable = false)
     private BigDecimal balance;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonManagedReference(value = "owner")
     @ToString.Exclude

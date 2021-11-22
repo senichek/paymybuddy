@@ -1,0 +1,54 @@
+@startuml name PayMyBuddy
+abstract class BaseEntity {
+    -protected Integer id;
+    +getters()
+    +setters()
+    +hash()
+    +equals()
+}
+
+class Person {
+    -private String name;
+    -private String email;
+    -private String password;
+    -private BigDecimal balance;
+    -private List<PersonConnection> connections;
+    -private List<MoneyTransaction> transactions;
+    +getters()
+    +setters()
+    +hash()
+    +equals()
+}
+
+class MoneyTransaction {
+    -private String description;
+    -private BigDecimal amount;
+    -private Person sender;
+    -private Person receiver;
+    -private String senderEmail;
+    -private String receiverEmail;
+    -private BigDecimal tax;
+    -private LocalDateTime dateTime;
+    +getters()
+    +setters()
+    +hash()
+    +equals()
+}
+
+class PersonConnection {
+    -private String email;
+    -private Person owner;
+    -private Person friend;
+    +getters()
+    +setters()
+    +hash()
+    +equals()
+}
+
+BaseEntity <|-- Person
+BaseEntity <|-- MoneyTransaction
+BaseEntity <|-- PersonConnection
+
+Person "1" *-- "many" MoneyTransaction
+Person "1" *-- "many" PersonConnection
+@enduml

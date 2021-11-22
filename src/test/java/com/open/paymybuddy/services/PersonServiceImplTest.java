@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 
+import com.open.paymybuddy.models.MoneyTransaction;
 import com.open.paymybuddy.models.Person;
 import com.open.paymybuddy.utils.NotFoundException;
 
@@ -188,5 +189,19 @@ public class PersonServiceImplTest {
         prs.setBalance(BigDecimal.valueOf(121));
         exception = assertThrows(Exception.class, () -> personService.decreaseBalance(prs));
         assertTrue(exception.getMessage().contains("Not enough balance for payout. Decrease the payout amount."));
+    }
+
+    @Test
+    @WithUserDetails("james@gmail.com")
+    public void deleteTest() throws NotFoundException {
+        Person fromService = personService.delete(3);
+        assertEquals(3, fromService.getId());
+    }
+
+    @Test
+    @WithUserDetails("james@gmail.com")
+    public void deleteWithExceptionTest() throws NotFoundException {
+        Exception exception = assertThrows(NotFoundException.class, () -> personService.delete(20));
+        assertTrue(exception.getMessage().contains("Entity with id 20 does not exist."));
     }
 }

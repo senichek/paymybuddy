@@ -10,6 +10,7 @@ import com.open.paymybuddy.utils.NotFoundException;
 import com.open.paymybuddy.utils.SecurityUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    @Transactional
     public Person update(Person person) throws Exception {
         Person toUpdate = personRepo.findByid(person.getId());
         Boolean changeDetected = false;
@@ -128,5 +130,18 @@ public class PersonServiceImpl implements PersonService {
             log.info("Balance of userID {} was decreased by {}.", toUpdate.getId(), person.getBalance());
         }
         return toUpdate;
+    }
+
+    @Override
+    public Person delete(Integer id) throws NotFoundException {
+        Person prs = personRepo.findByid(id);
+		if (prs == null) {
+			throw new NotFoundException(String.format("Entity with id %s does not exist.", id));
+		}
+		 else {
+			personRepo.deleteByPersonID(id);
+			log.info("Deleted {}.", prs);
+			return prs;
+		}
     }
 }

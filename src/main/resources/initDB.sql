@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS connections cascade;
-DROP TABLE IF EXISTS transactions;
+DROP TABLE IF EXISTS transactions cascade;
 DROP TABLE IF EXISTS users cascade;
 
 create table users(
@@ -16,9 +16,9 @@ owner_id integer(10) NOT NULL,
 friend_id integer(10) NOT NULL,
 friend_email varchar(25) NOT NULL,
 FOREIGN KEY (owner_id)
-REFERENCES users(ID),
+REFERENCES users(ID) ON DELETE CASCADE,
 FOREIGN KEY (friend_id)
-REFERENCES users(ID)
+REFERENCES users(ID) ON DELETE CASCADE
 );
 
 create table transactions(
@@ -32,9 +32,9 @@ amount double,
 tax double,
 date_time DATETIME NOT NULL,
 FOREIGN KEY (sender_id)
-REFERENCES users(ID),
+REFERENCES users(ID) ON DELETE CASCADE,
 FOREIGN KEY (receiver_id)
-REFERENCES users(ID)
+REFERENCES users(ID) ON DELETE CASCADE
 );
 
 /* The un-crypted password for all three users is pass111 */

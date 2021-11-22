@@ -9,4 +9,5 @@ public interface PersonService {
     Person findById(Integer id) throws NotFoundException;
     Person increaseBalance(Person person) throws Exception;
     Person decreaseBalance(Person person) throws Exception;
+    Person delete(Integer id) throws NotFoundException;
 }
