@@ -49,6 +49,9 @@ BaseEntity <|-- Person
 BaseEntity <|-- MoneyTransaction
 BaseEntity <|-- PersonConnection
 
-Person "1" *-- "many" MoneyTransaction
-Person "1" *-- "many" PersonConnection
+Person "1" *-- "many" MoneyTransaction::sender
+Person "1" *-- "many" MoneyTransaction::receiver
+
+Person "1" *-- "many" PersonConnection::owner
+Person "1" *-- "many" PersonConnection::friend
 @enduml
