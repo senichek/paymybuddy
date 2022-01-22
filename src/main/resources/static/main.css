@@ -64,6 +64,11 @@
   justify-content: center;
 }
 
+.info-page-container {
+  margin-left: 33%;
+  margin-top: 20;
+}
+
 button {
   min-width: 220px;
 }

@@ -61,6 +61,11 @@ public class MainController {
         return "home";
     }
 
+    @GetMapping(value = "/info")
+    public String showInfoPage() {
+        return "info";
+    }
+
     @GetMapping(value = "/registration")
     public String showRegistration() {
         return "registration";
