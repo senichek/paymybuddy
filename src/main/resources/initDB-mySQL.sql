@@ -3,35 +3,34 @@ DROP TABLE IF EXISTS transactions cascade;
 DROP TABLE IF EXISTS users cascade;
 
 create table users(
-ID SERIAL PRIMARY KEY,
+ID int PRIMARY KEY AUTO_INCREMENT,
 name varchar(25) NOT NULL,
 email varchar(25) NOT NULL UNIQUE,
 password varchar(250) NOT NULL,
-balance float
+balance double
 );
 
-create table connections
-(
-ID SERIAL PRIMARY KEY,
-owner_id integer NOT NULL,
-friend_id integer NOT NULL,
-friend_email varchar NOT NULL,
+create table connections(
+ID int PRIMARY KEY AUTO_INCREMENT,
+owner_id integer(10) NOT NULL,
+friend_id integer(10) NOT NULL,
+friend_email varchar(25) NOT NULL,
 FOREIGN KEY (owner_id)
-REFERENCES users (ID) ON DELETE CASCADE,
+REFERENCES users(ID) ON DELETE CASCADE,
 FOREIGN KEY (friend_id)
-REFERENCES users (ID) ON DELETE CASCADE
+REFERENCES users(ID) ON DELETE CASCADE
 );
 
 create table transactions(
-ID SERIAL PRIMARY KEY,
-sender_id integer NOT NULL,
-sender_email varchar NOT NULL,
-receiver_id integer NOT NULL,
-receiver_email varchar NOT NULL,
-description varchar NOT NULL,
-amount float,
-tax float,
-date_time TIMESTAMP NOT NULL,
+ID int PRIMARY KEY AUTO_INCREMENT,
+sender_id integer(10) NOT NULL,
+sender_email varchar(25) NOT NULL,
+receiver_id integer(10) NOT NULL,
+receiver_email varchar(25) NOT NULL,
+description varchar(150) NOT NULL,
+amount double,
+tax double,
+date_time DATETIME NOT NULL,
 FOREIGN KEY (sender_id)
 REFERENCES users(ID) ON DELETE CASCADE,
 FOREIGN KEY (receiver_id)
