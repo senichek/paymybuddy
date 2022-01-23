@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
-
-import com.open.paymybuddy.models.MoneyTransaction;
 import com.open.paymybuddy.models.Person;
 import com.open.paymybuddy.utils.NotFoundException;
 

@@ -10,7 +10,6 @@ import com.open.paymybuddy.utils.NotFoundException;
 import com.open.paymybuddy.utils.SecurityUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
