@@ -61,7 +61,7 @@ public class MainController {
         return "home";
     }
 
-    @GetMapping(value = "/info")
+    @GetMapping(value = "/")
     public String showInfoPage() {
         return "info";
     }

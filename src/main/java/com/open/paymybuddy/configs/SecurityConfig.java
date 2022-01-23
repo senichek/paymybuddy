@@ -26,8 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {        
         http
                 .authorizeRequests()
-                .antMatchers("/login", "/info").permitAll()
-                .antMatchers("/", "/home", "/transfer", "/profile/**", "/connections").authenticated()
+                .antMatchers("/login", "/").permitAll()
+                .antMatchers("/home", "/transfer", "/profile/**", "/connections").authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login") //custom login page, login view must be also returned by controller
